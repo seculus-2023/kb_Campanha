@@ -1,3 +1,4 @@
+REM git pull origin main --allow-unrelated-histories
 @echo off
 :: --- CONFIGURAÇÕES ---
 :: Certifique-se de NÃO deixar espaços entre o = e a URL
