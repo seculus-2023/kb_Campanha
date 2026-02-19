@@ -1,25 +1,26 @@
 @echo off
 :: --- CONFIGURAÇÕES ---
+:: Certifique-se de NÃO deixar espaços entre o = e a URL
 set REPO_URL=https://github.com/seculus-2023/kb_Campanha.git
-
-https://github.com
-
 set MENSAGEM="Backup KB GeneXus - %date% %time%"
 
-:: --- EXECUÇÃO ---
-echo [1/4] Inicializando Git (se necessario)...
+echo [1/5] Inicializando Git...
 if not exist .git (
     git init
     git remote add origin %REPO_URL%
 )
 
-echo [2/4] Adicionando arquivos...
+echo [2/5] Sincronizando com arquivos do GitHub (Pull)...
+:: Isso resolve o erro "rejected" trazendo o que ja existe la
+git pull origin main --rebase
+
+echo [3/5] Adicionando arquivos locais...
 git add .
 
-echo [3/4] Criando commit...
+echo [4/5] Criando commit...
 git commit -m %MENSAGEM%
 
-echo [4/4] Enviando para o GitHub (Main)...
+echo [5/5] Enviando para o GitHub...
 git branch -M main
 git push -u origin main
 
