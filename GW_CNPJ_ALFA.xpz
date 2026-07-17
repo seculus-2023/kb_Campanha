@@ -1,0 +1,605 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ExportFile>
+  <KMW>
+    <MajorVersion>4</MajorVersion>
+    <MinorVersion>0</MinorVersion>
+    <Build>187820</Build>
+  </KMW>
+  <Source kb="bd4bd580-db93-4b4d-9c11-0d63d9614a23" username="GLAUBERMACIEL\glaub" UNCPath="\\GLAUBERMACIEL\C$\ProjetosGX\GXWARE\GW_CNPJ_ALFA">
+    <Version guid="bbe58eb2-4b62-4444-8493-584c863a044c" name="GW_CNPJ_ALFA" />
+  </Source>
+  <Objects>
+    <Object parentGuid="b2d1a572-944f-4586-9d16-4133496e4a78" user="GLAUBERMACIEL\glaub" versionDate="0001-01-01T00:00:00.0000000" lastUpdate="2026-02-15T22:59:47.0000000Z" checksum="1e2949ee37f1a52dd5c309bdffb1f34c" fullyQualifiedName="Validar_CNPJ" moduleGuid="afa47377-41d5-4ae8-9755-6f53150aa361" guid="16574f4c-d446-43e7-b263-68b72d427037" name="Validar_CNPJ" type="84a12160-f59b-4ad7-a683-ea4481ac23e9" description="Validar_CNPJ" parent="CPF_CNPJ" parentType="00000000-0000-0000-0000-000000000008">
+      <Part type="528d1c06-a9c2-420d-bd35-21dca83f12ff">
+        <Source><![CDATA[// Código:
+&Limpo = &CNPJ.Trim().ToUpper()
+&Limpo = &Limpo.Replace(".","").Replace("/","").Replace("-","").Replace(" ","")
+
+If &Limpo.Length() <> 14
+   &Valido = False
+   Return
+EndIf
+
+&TodosIguais = True
+For &i = 2 To 14
+   If &Limpo.Substring(&i, 1) <> &Limpo.Substring(1, 1)
+      &TodosIguais = False
+      Exit
+   EndIf
+EndFor
+
+If &TodosIguais
+   &Valido = False
+   Return
+EndIf
+
+&Soma = 0
+&Soma = &Soma + (Asc(&Limpo.Substring(1,1)) - 48) * 5
+&Soma = &Soma + (Asc(&Limpo.Substring(2,1)) - 48) * 4
+&Soma = &Soma + (Asc(&Limpo.Substring(3,1)) - 48) * 3
+&Soma = &Soma + (Asc(&Limpo.Substring(4,1)) - 48) * 2
+&Soma = &Soma + (Asc(&Limpo.Substring(5,1)) - 48) * 9
+&Soma = &Soma + (Asc(&Limpo.Substring(6,1)) - 48) * 8
+&Soma = &Soma + (Asc(&Limpo.Substring(7,1)) - 48) * 7
+&Soma = &Soma + (Asc(&Limpo.Substring(8,1)) - 48) * 6
+&Soma = &Soma + (Asc(&Limpo.Substring(9,1)) - 48) * 5
+&Soma = &Soma + (Asc(&Limpo.Substring(10,1)) - 48) * 4
+&Soma = &Soma + (Asc(&Limpo.Substring(11,1)) - 48) * 3
+&Soma = &Soma + (Asc(&Limpo.Substring(12,1)) - 48) * 2
+&Resto = Mod(&Soma, 11)
+
+If &Resto < 2
+   &DV1 = 0
+Else
+   &DV1 = 11 - &Resto
+EndIf
+
+If &DV1 <> (Asc(&Limpo.Substring(13,1)) - 48)
+   &Valido = False
+   Return
+EndIf
+
+&Soma = 0
+&Soma = &Soma + (Asc(&Limpo.Substring(1,1)) - 48) * 6
+&Soma = &Soma + (Asc(&Limpo.Substring(2,1)) - 48) * 5
+&Soma = &Soma + (Asc(&Limpo.Substring(3,1)) - 48) * 4
+&Soma = &Soma + (Asc(&Limpo.Substring(4,1)) - 48) * 3
+&Soma = &Soma + (Asc(&Limpo.Substring(5,1)) - 48) * 2
+&Soma = &Soma + (Asc(&Limpo.Substring(6,1)) - 48) * 9
+&Soma = &Soma + (Asc(&Limpo.Substring(7,1)) - 48) * 8
+&Soma = &Soma + (Asc(&Limpo.Substring(8,1)) - 48) * 7
+&Soma = &Soma + (Asc(&Limpo.Substring(9,1)) - 48) * 6
+&Soma = &Soma + (Asc(&Limpo.Substring(10,1)) - 48) * 5
+&Soma = &Soma + (Asc(&Limpo.Substring(11,1)) - 48) * 4
+&Soma = &Soma + (Asc(&Limpo.Substring(12,1)) - 48) * 3
+&Soma = &Soma + (Asc(&Limpo.Substring(13,1)) - 48) * 2
+
+&Resto = Mod(&Soma, 11)
+
+If &Resto < 2
+   &DV2 = 0
+Else
+   &DV2 = 11 - &Resto
+EndIf
+
+If &DV2 <> (Asc(&Limpo.Substring(14,1)) - 48)
+   &Valido = False
+   Return
+EndIf
+
+&Valido = True
+]]></Source>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="c414ed00-8cc4-4f44-8820-4baf93547173">
+        <Properties />
+      </Part>
+      <Part type="9b0a32a3-de6d-4be1-a4dd-1b85d3741534">
+        <Source><![CDATA[Parm(In:&CNPJ, Out:&Valido);   
+]]></Source>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="763f0d8b-d8ac-4db4-8dd4-de8979f2b5b9">
+        <Source><![CDATA[]]></Source>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="e4c4ade7-53f0-4a56-bdfd-843735b66f47">
+        <Variable Name="CNPJ">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>CNPJ</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:VarChar</Value></Property><Property><Name>Length</Name><Value>18</Value></Property><Property><Name>AttMaxLen</Name><Value>18</Value></Property></Properties>
+        </Variable>
+        <Variable Name="DV1">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>DV1</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:Numeric</Value></Property><Property><Name>Length</Name><Value>2</Value></Property><Property><Name>AttMaxLen</Name><Value>2</Value></Property></Properties>
+        </Variable>
+        <Variable Name="DV2">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>DV2</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:Numeric</Value></Property><Property><Name>Length</Name><Value>2</Value></Property><Property><Name>AttMaxLen</Name><Value>2</Value></Property></Properties>
+        </Variable>
+        <Variable Name="i">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>i</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:Numeric</Value></Property><Property><Name>Length</Name><Value>2</Value></Property><Property><Name>AttMaxLen</Name><Value>2</Value></Property></Properties>
+        </Variable>
+        <Variable Name="Limpo">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>Limpo</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:VarChar</Value></Property><Property><Name>Length</Name><Value>14</Value></Property><Property><Name>AttMaxLen</Name><Value>14</Value></Property></Properties>
+        </Variable>
+        <Variable Name="Resto">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>Resto</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:Numeric</Value></Property><Property><Name>Length</Name><Value>2</Value></Property><Property><Name>AttMaxLen</Name><Value>2</Value></Property></Properties>
+        </Variable>
+        <Variable Name="Soma">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>Soma</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:Numeric</Value></Property><Property><Name>Length</Name><Value>8</Value></Property><Property><Name>AttMaxLen</Name><Value>8</Value></Property></Properties>
+        </Variable>
+        <Variable Name="TodosIguais">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>TodosIguais</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:Boolean</Value></Property></Properties>
+        </Variable>
+        <Variable Name="Valido">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>Valido</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:Boolean</Value></Property></Properties>
+        </Variable>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="ad3ca970-19d0-44e1-a7b7-db05556e820c">
+        <Help>
+          <HelpItem>
+            <Language>88313f43-5eb2-0000-0028-e8d9f5bf9588-Portuguese</Language>
+            <Content />
+          </HelpItem>
+        </Help>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="babf62c5-0111-49e9-a1c3-cc004d90900a">
+        <Properties />
+      </Part>
+      <Properties><Property><Name>Name</Name><Value>Validar_CNPJ</Value></Property><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+    </Object>
+    <Object parentGuid="b2d1a572-944f-4586-9d16-4133496e4a78" user="GLAUBERMACIEL\glaub" versionDate="0001-01-01T00:00:00.0000000" lastUpdate="2026-02-15T23:01:32.0000000Z" checksum="8688cce6dc0384ea97243200ba1e08f1" fullyQualifiedName="Validar_CPF" moduleGuid="afa47377-41d5-4ae8-9755-6f53150aa361" guid="072f4575-7d5a-441d-b5af-cfbc75cf2145" name="Validar_CPF" type="84a12160-f59b-4ad7-a683-ea4481ac23e9" description="Validar_CPF" parent="CPF_CNPJ" parentType="00000000-0000-0000-0000-000000000008">
+      <Part type="528d1c06-a9c2-420d-bd35-21dca83f12ff">
+        <Source><![CDATA[// Código:
+&Limpo = &CPF.Trim().Replace(".","").Replace("-","")
+
+If &Limpo.Length() <> 11
+   &Valido = False
+   Return
+EndIf
+
+&TodosIguais = True
+For &i = 2 To 11
+   If &Limpo.Substring(&i, 1) <> &Limpo.Substring(1, 1)
+      &TodosIguais = False
+      Exit
+   EndIf
+EndFor
+
+If &TodosIguais
+   &Valido = False
+   Return
+EndIf
+
+&Soma = 0
+&Soma += Val(&Limpo.Substring(1,1)) * 10
+&Soma += Val(&Limpo.Substring(2,1)) * 9
+&Soma += Val(&Limpo.Substring(3,1)) * 8
+&Soma += Val(&Limpo.Substring(4,1)) * 7
+&Soma += Val(&Limpo.Substring(5,1)) * 6
+&Soma += Val(&Limpo.Substring(6,1)) * 5
+&Soma += Val(&Limpo.Substring(7,1)) * 4
+&Soma += Val(&Limpo.Substring(8,1)) * 3
+&Soma += Val(&Limpo.Substring(9,1)) * 2
+
+&Resto = Mod(&Soma * 10, 11)
+If &Resto = 10
+   &Resto = 0
+EndIf
+
+If &Resto <> Val(&Limpo.Substring(10,1))
+   &Valido = False
+   Return
+EndIf
+
+&Soma.SetEmpty()
+&Soma += Val(&Limpo.Substring(1,1)) * 11
+&Soma += Val(&Limpo.Substring(2,1)) * 10
+&Soma += Val(&Limpo.Substring(3,1)) * 9
+&Soma += Val(&Limpo.Substring(4,1)) * 8
+&Soma += Val(&Limpo.Substring(5,1)) * 7
+&Soma += Val(&Limpo.Substring(6,1)) * 6
+&Soma += Val(&Limpo.Substring(7,1)) * 5
+&Soma += Val(&Limpo.Substring(8,1)) * 4
+&Soma += Val(&Limpo.Substring(9,1)) * 3
+&Soma += Val(&Limpo.Substring(10,1)) * 2
+
+&Resto = Mod(&Soma * 10, 11)
+If &Resto = 10
+   &Resto = 0
+EndIf
+
+If &Resto <> Val(&Limpo.Substring(11,1))
+   &Valido = False
+   Return
+EndIf
+
+&Valido = True
+]]></Source>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="c414ed00-8cc4-4f44-8820-4baf93547173">
+        <Properties />
+      </Part>
+      <Part type="9b0a32a3-de6d-4be1-a4dd-1b85d3741534">
+        <Source><![CDATA[Parm(In:&CPF, Out:&Valido);
+]]></Source>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="763f0d8b-d8ac-4db4-8dd4-de8979f2b5b9">
+        <Source><![CDATA[]]></Source>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="e4c4ade7-53f0-4a56-bdfd-843735b66f47">
+        <Variable Name="CPF">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>CPF</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:VarChar</Value></Property><Property><Name>Length</Name><Value>14</Value></Property><Property><Name>AttMaxLen</Name><Value>14</Value></Property></Properties>
+        </Variable>
+        <Variable Name="Limpo">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>Limpo</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:VarChar</Value></Property><Property><Name>Length</Name><Value>11</Value></Property><Property><Name>AttMaxLen</Name><Value>11</Value></Property></Properties>
+        </Variable>
+        <Variable Name="Resto">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>Resto</Value></Property></Properties>
+        </Variable>
+        <Variable Name="Soma">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>Soma</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:Numeric</Value></Property><Property><Name>Length</Name><Value>5</Value></Property><Property><Name>AttMaxLen</Name><Value>5</Value></Property></Properties>
+        </Variable>
+        <Variable Name="Valido">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>Valido</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:Boolean</Value></Property></Properties>
+        </Variable>
+        <Variable Name="TodosIguais">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>TodosIguais</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:Boolean</Value></Property></Properties>
+        </Variable>
+        <Variable Name="i">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>i</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:Numeric</Value></Property><Property><Name>Length</Name><Value>2</Value></Property><Property><Name>AttMaxLen</Name><Value>2</Value></Property></Properties>
+        </Variable>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="ad3ca970-19d0-44e1-a7b7-db05556e820c">
+        <Help>
+          <HelpItem>
+            <Language>88313f43-5eb2-0000-0028-e8d9f5bf9588-Portuguese</Language>
+            <Content />
+          </HelpItem>
+        </Help>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="babf62c5-0111-49e9-a1c3-cc004d90900a">
+        <Properties />
+      </Part>
+      <Properties><Property><Name>Name</Name><Value>Validar_CPF</Value></Property><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+    </Object>
+    <Object parentGuid="b2d1a572-944f-4586-9d16-4133496e4a78" user="GLAUBERMACIEL\glaub" versionDate="0001-01-01T00:00:00.0000000" lastUpdate="2026-02-15T01:49:48.0000000Z" checksum="4f5393cabcf35d7eae1d10ce16ce311d" fullyQualifiedName="Formatar_CPF" moduleGuid="afa47377-41d5-4ae8-9755-6f53150aa361" guid="e95c3088-3a43-48b6-9cce-a6114f05132d" name="Formatar_CPF" type="84a12160-f59b-4ad7-a683-ea4481ac23e9" description="Formatar_CPF" parent="CPF_CNPJ" parentType="00000000-0000-0000-0000-000000000008">
+      <Part type="528d1c06-a9c2-420d-bd35-21dca83f12ff">
+        <Source><![CDATA[// Código:
+&Limpo = &CPF.Trim().Replace(".","").Replace("-","")
+
+If &Limpo.Length() = 11
+   &CPFFormatado = &Limpo.Substring(1,3) + "." + &Limpo.Substring(4,3) + "." + &Limpo.Substring(7,3) + "-" + &Limpo.Substring(10,2)
+Else
+   &CPFFormatado = &CPF
+EndIf
+]]></Source>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="c414ed00-8cc4-4f44-8820-4baf93547173">
+        <Properties />
+      </Part>
+      <Part type="9b0a32a3-de6d-4be1-a4dd-1b85d3741534">
+        <Source><![CDATA[Parm(In:&CPF, Out:&CPFFormatado);
+]]></Source>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="763f0d8b-d8ac-4db4-8dd4-de8979f2b5b9">
+        <Source><![CDATA[]]></Source>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="e4c4ade7-53f0-4a56-bdfd-843735b66f47">
+        <Variable Name="CPF">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>CPF</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:VarChar</Value></Property><Property><Name>Length</Name><Value>14</Value></Property><Property><Name>AttMaxLen</Name><Value>14</Value></Property></Properties>
+        </Variable>
+        <Variable Name="CPFFormatado">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>CPFFormatado</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:VarChar</Value></Property><Property><Name>Length</Name><Value>14</Value></Property><Property><Name>AttMaxLen</Name><Value>14</Value></Property></Properties>
+        </Variable>
+        <Variable Name="Limpo">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>Limpo</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:VarChar</Value></Property><Property><Name>Length</Name><Value>11</Value></Property><Property><Name>AttMaxLen</Name><Value>11</Value></Property></Properties>
+        </Variable>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="ad3ca970-19d0-44e1-a7b7-db05556e820c">
+        <Help>
+          <HelpItem>
+            <Language>88313f43-5eb2-0000-0028-e8d9f5bf9588-Portuguese</Language>
+            <Content />
+          </HelpItem>
+        </Help>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="babf62c5-0111-49e9-a1c3-cc004d90900a">
+        <Properties />
+      </Part>
+      <Properties><Property><Name>Name</Name><Value>Formatar_CPF</Value></Property><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+    </Object>
+    <Object parentGuid="b2d1a572-944f-4586-9d16-4133496e4a78" user="GLAUBERMACIEL\glaub" versionDate="0001-01-01T00:00:00.0000000" lastUpdate="2026-02-15T01:50:28.0000000Z" checksum="26c26768bae1a8f92bd5b8912f4e0818" fullyQualifiedName="Formatar_CNPJ" moduleGuid="afa47377-41d5-4ae8-9755-6f53150aa361" guid="92ca5795-101b-48e0-963a-34760528adfc" name="Formatar_CNPJ" type="84a12160-f59b-4ad7-a683-ea4481ac23e9" description="Formatar_CNPJ" parent="CPF_CNPJ" parentType="00000000-0000-0000-0000-000000000008">
+      <Part type="528d1c06-a9c2-420d-bd35-21dca83f12ff">
+        <Source><![CDATA[// Código:
+&Limpo = &CNPJ.Trim().ToUpper()
+&Limpo = &Limpo.Replace(".","").Replace("/","").Replace("-","").Replace(" ","")
+
+If &Limpo.Length() = 14
+   &CNPJFormatado = &Limpo.Substring(1,2) + "." + &Limpo.Substring(3,3) + "." + &Limpo.Substring(6,3) + "/" + &Limpo.Substring(9,4) + "-" + &Limpo.Substring(13,2)
+Else
+   &CNPJFormatado = &CNPJ
+EndIf
+]]></Source>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="c414ed00-8cc4-4f44-8820-4baf93547173">
+        <Properties />
+      </Part>
+      <Part type="9b0a32a3-de6d-4be1-a4dd-1b85d3741534">
+        <Source><![CDATA[Parm(In:&CNPJ, Out:&CNPJFormatado);
+]]></Source>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="763f0d8b-d8ac-4db4-8dd4-de8979f2b5b9">
+        <Source><![CDATA[]]></Source>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="e4c4ade7-53f0-4a56-bdfd-843735b66f47">
+        <Variable Name="CNPJ">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>CNPJ</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:VarChar</Value></Property><Property><Name>Length</Name><Value>18</Value></Property><Property><Name>AttMaxLen</Name><Value>18</Value></Property></Properties>
+        </Variable>
+        <Variable Name="CNPJFormatado">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>CNPJFormatado</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:VarChar</Value></Property><Property><Name>Length</Name><Value>18</Value></Property><Property><Name>AttMaxLen</Name><Value>18</Value></Property></Properties>
+        </Variable>
+        <Variable Name="Limpo">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>Limpo</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:VarChar</Value></Property><Property><Name>Length</Name><Value>14</Value></Property><Property><Name>AttMaxLen</Name><Value>14</Value></Property></Properties>
+        </Variable>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="ad3ca970-19d0-44e1-a7b7-db05556e820c">
+        <Help>
+          <HelpItem>
+            <Language>88313f43-5eb2-0000-0028-e8d9f5bf9588-Portuguese</Language>
+            <Content />
+          </HelpItem>
+        </Help>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="babf62c5-0111-49e9-a1c3-cc004d90900a">
+        <Properties />
+      </Part>
+      <Properties><Property><Name>Name</Name><Value>Formatar_CNPJ</Value></Property><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+    </Object>
+    <Object parentGuid="b2d1a572-944f-4586-9d16-4133496e4a78" user="GLAUBERMACIEL\glaub" versionDate="0001-01-01T00:00:00.0000000" lastUpdate="2026-02-15T23:15:44.0000000Z" checksum="cf4152546a94a4eca68d9d804273da31" fullyQualifiedName="ValidarDocumento" moduleGuid="afa47377-41d5-4ae8-9755-6f53150aa361" guid="802fc152-a2a2-46a8-8fea-c0713e8daf98" name="ValidarDocumento" type="84a12160-f59b-4ad7-a683-ea4481ac23e9" description="Validar Documento" parent="CPF_CNPJ" parentType="00000000-0000-0000-0000-000000000008">
+      <Part type="528d1c06-a9c2-420d-bd35-21dca83f12ff">
+        <Source><![CDATA[// Código:
+&Limpo = &Documento.Trim().ToUpper()
+&Limpo = &Limpo.Replace(".","").Replace("/","").Replace("-","").Replace(" ","")
+
+Do Case
+	Case &Limpo.Length() = 11
+   		&Tipo = "CPF"
+		Validar_CPF(&Documento, &Valido)
+		If &Valido
+			Formatar_CPF(&Documento, &Formatado)
+		Else
+			&Formatado = &Documento
+		EndIf
+
+	Case &Limpo.Length() = 14
+		&Tipo = "CNPJ"
+		Validar_CNPJ(&Documento, &Valido)
+		If &Valido
+			Formatar_CNPJ(&Documento, &Formatado)
+		Else
+			&Formatado = &Documento
+		EndIf
+	OtherWise
+   		&Valido = False
+   		&Tipo = "INVALIDO"
+   		&Formatado = &Documento
+EndCase
+]]></Source>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="c414ed00-8cc4-4f44-8820-4baf93547173">
+        <Properties />
+      </Part>
+      <Part type="9b0a32a3-de6d-4be1-a4dd-1b85d3741534">
+        <Source><![CDATA[Parm(In:&Documento, Out:&Valido, Out:&Tipo, Out:&Formatado);
+]]></Source>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="763f0d8b-d8ac-4db4-8dd4-de8979f2b5b9">
+        <Source><![CDATA[]]></Source>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="e4c4ade7-53f0-4a56-bdfd-843735b66f47">
+        <Variable Name="Documento">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>Documento</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:VarChar</Value></Property><Property><Name>Length</Name><Value>18</Value></Property><Property><Name>AttMaxLen</Name><Value>18</Value></Property></Properties>
+        </Variable>
+        <Variable Name="Valido">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>Valido</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:Boolean</Value></Property></Properties>
+        </Variable>
+        <Variable Name="Tipo">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>Tipo</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:VarChar</Value></Property><Property><Name>Length</Name><Value>10</Value></Property><Property><Name>AttMaxLen</Name><Value>10</Value></Property></Properties>
+        </Variable>
+        <Variable Name="Formatado">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>Formatado</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:VarChar</Value></Property><Property><Name>Length</Name><Value>18</Value></Property><Property><Name>AttMaxLen</Name><Value>18</Value></Property></Properties>
+        </Variable>
+        <Variable Name="Limpo">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>Limpo</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:VarChar</Value></Property><Property><Name>Length</Name><Value>14</Value></Property><Property><Name>AttMaxLen</Name><Value>14</Value></Property></Properties>
+        </Variable>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="ad3ca970-19d0-44e1-a7b7-db05556e820c">
+        <Help>
+          <HelpItem>
+            <Language>88313f43-5eb2-0000-0028-e8d9f5bf9588-Portuguese</Language>
+            <Content />
+          </HelpItem>
+        </Help>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="babf62c5-0111-49e9-a1c3-cc004d90900a">
+        <Properties />
+      </Part>
+      <Properties><Property><Name>Name</Name><Value>ValidarDocumento</Value></Property><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+    </Object>
+    <Object parentGuid="b2d1a572-944f-4586-9d16-4133496e4a78" user="GLAUBERMACIEL\glaub" versionDate="0001-01-01T00:00:00.0000000" lastUpdate="2026-02-16T14:12:31.0000000Z" checksum="14ae14936f680af322784a5b7d8263ed" fullyQualifiedName="EntradaDados" moduleGuid="afa47377-41d5-4ae8-9755-6f53150aa361" guid="2d7acd61-46b6-4fbc-a371-e4cd8717293d" name="EntradaDados" type="c9584656-94b6-4ccd-890f-332d11fc2c25" description="Entrada Dados" parent="CPF_CNPJ" parentType="00000000-0000-0000-0000-000000000008">
+      <Part type="d24a58ad-57ba-41b7-9e6e-eaca3543c778">
+        <Source><![CDATA[<GxMultiForm rootId="1" version="html:15.0.0;layout:17.11.0"><Form id="1" type="layout"><detail><layout><table controlName="MainTable" tableType="Responsive" responsiveSizes="[]"><row><cell><data attribute="&amp;CPFCNPJ" /></cell><cell><ucw gxControlType="-1738980105" PATTERN_ELEMENT_CUSTOM_PROPERTIES="&lt;Properties&gt;&lt;Property&gt;&lt;Name&gt;ControlName&lt;/Name&gt;&lt;Value&gt;GxMask1&lt;/Value&gt;&lt;/Property&gt;&lt;Property&gt;&lt;Name&gt;Picture&lt;/Name&gt;&lt;Value&gt;cpfcnpj&lt;/Value&gt;&lt;/Property&gt;&lt;/Properties&gt;" /></cell></row><row><cell><action controlName="Validar" onClickEvent="'Validar'" /></cell></row><row><cell><data attribute="&amp;Formatado" /></cell></row><row><cell><data attribute="&amp;Tipo" /></cell></row><row><cell><data attribute="&amp;Valido" /></cell></row></table></layout></detail></Form></GxMultiForm>]]></Source>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="9b0a32a3-de6d-4be1-a4dd-1b85d3741534">
+        <Properties />
+      </Part>
+      <Part type="c44bd5ff-f918-415b-98e6-aca44fed84fa">
+        <Source><![CDATA[Event Start
+	GXMask1.AttachControl = &CPFCNPJ.InternalName
+Endevent
+
+Event 'Validar'
+
+	ValidarDocumento(&CPFCNPJ, &Valido, &Tipo, &Formatado)	
+	If &Valido
+     	Msg("Documento válido: " + &Formatado)
+	Else
+		Msg("Documento inválido: " + &Formatado)
+   	EndIf
+
+EndEvent
+]]></Source>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="763f0d8b-d8ac-4db4-8dd4-de8979f2b5b9">
+        <Properties />
+      </Part>
+      <Part type="e4c4ade7-53f0-4a56-bdfd-843735b66f47">
+        <Variable Name="CPFCNPJ">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>CPFCNPJ</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:VarChar</Value></Property><Property><Name>Length</Name><Value>18</Value></Property><Property><Name>AttMaxLen</Name><Value>18</Value></Property></Properties>
+        </Variable>
+        <Variable Name="Formatado">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>Formatado</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:VarChar</Value></Property><Property><Name>Length</Name><Value>18</Value></Property><Property><Name>AttMaxLen</Name><Value>18</Value></Property></Properties>
+        </Variable>
+        <Variable Name="Tipo">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>Tipo</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:VarChar</Value></Property><Property><Name>Length</Name><Value>10</Value></Property><Property><Name>AttMaxLen</Name><Value>10</Value></Property></Properties>
+        </Variable>
+        <Variable Name="Valido">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>Valido</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:Boolean</Value></Property></Properties>
+        </Variable>
+        <Variable Name="TipoPessoa">
+          <Documentation />
+          <Properties><Property><Name>Name</Name><Value>TipoPessoa</Value></Property><Property><Name>ATTCUSTOMTYPE</Name><Value>bas:Character</Value></Property><Property><Name>Length</Name><Value>1</Value></Property><Property><Name>AttMaxLen</Name><Value>1</Value></Property></Properties>
+        </Variable>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="ad3ca970-19d0-44e1-a7b7-db05556e820c">
+        <Help>
+          <HelpItem>
+            <Language>88313f43-5eb2-0000-0028-e8d9f5bf9588-Portuguese</Language>
+            <Content />
+          </HelpItem>
+        </Help>
+        <Properties><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+      </Part>
+      <Part type="babf62c5-0111-49e9-a1c3-cc004d90900a">
+        <Properties />
+      </Part>
+      <Properties><Property><Name>Name</Name><Value>EntradaDados</Value></Property><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+    </Object>
+    <Object parentGuid="afa47377-41d5-4ae8-9755-6f53150aa361" user="GLAUBERMACIEL\glaub" versionDate="0001-01-01T00:00:00.0000000" lastUpdate="2026-02-14T20:13:09.0000000Z" checksum="4c5a6841266664fd52cc1f34446b567f" fullyQualifiedName="CPF_CNPJ" moduleGuid="afa47377-41d5-4ae8-9755-6f53150aa361" guid="b2d1a572-944f-4586-9d16-4133496e4a78" name="CPF_CNPJ" type="00000000-0000-0000-0000-000000000008" description="CPF_CNPJ">
+      <Properties><Property><Name>Name</Name><Value>CPF_CNPJ</Value></Property><Property><Name>IsDefault</Name><Value>False</Value></Property></Properties>
+    </Object>
+  </Objects>
+  <Dependencies>
+    <Reference Package="3ea7e1c6-b849-4df9-931a-070171a8a2f0" Type="Object" Id="84a12160-f59b-4ad7-a683-ea4481ac23e9">
+      <Properties Name="Procedure" PackageName="GenexusBL" />
+    </Reference>
+    <Reference Package="3ea7e1c6-b849-4df9-931a-070171a8a2f0" Type="Part" Id="528d1c06-a9c2-420d-bd35-21dca83f12ff">
+      <Properties Name="Source" PackageName="GenexusBL" />
+    </Reference>
+    <Reference Package="3ea7e1c6-b849-4df9-931a-070171a8a2f0" Type="Part" Id="c414ed00-8cc4-4f44-8820-4baf93547173">
+      <Properties Name="Layout" PackageName="GenexusBL" />
+    </Reference>
+    <Reference Package="3ea7e1c6-b849-4df9-931a-070171a8a2f0" Type="Part" Id="9b0a32a3-de6d-4be1-a4dd-1b85d3741534">
+      <Properties Name="Rules" PackageName="GenexusBL" />
+    </Reference>
+    <Reference Package="3ea7e1c6-b849-4df9-931a-070171a8a2f0" Type="Part" Id="763f0d8b-d8ac-4db4-8dd4-de8979f2b5b9">
+      <Properties Name="Conditions" PackageName="GenexusBL" />
+    </Reference>
+    <Reference Package="3ea7e1c6-b849-4df9-931a-070171a8a2f0" Type="Part" Id="e4c4ade7-53f0-4a56-bdfd-843735b66f47">
+      <Properties Name="Variables" PackageName="GenexusBL" />
+    </Reference>
+    <Reference Package="3ea7e1c6-b849-4df9-931a-070171a8a2f0" Type="Part" Id="ad3ca970-19d0-44e1-a7b7-db05556e820c">
+      <Properties Name="Help" PackageName="GenexusBL" />
+    </Reference>
+    <Reference Package="3ea7e1c6-b849-4df9-931a-070171a8a2f0" Type="Part" Id="babf62c5-0111-49e9-a1c3-cc004d90900a">
+      <Properties Name="Documentation" PackageName="GenexusBL" />
+    </Reference>
+    <Reference Package="3ea7e1c6-b849-4df9-931a-070171a8a2f0" Type="Object" Id="c9584656-94b6-4ccd-890f-332d11fc2c25">
+      <Properties Name="Web Panel" PackageName="GenexusBL" />
+    </Reference>
+    <Reference Package="3ea7e1c6-b849-4df9-931a-070171a8a2f0" Type="Part" Id="d24a58ad-57ba-41b7-9e6e-eaca3543c778">
+      <Properties Name="Web Form" PackageName="GenexusBL" />
+    </Reference>
+    <Reference Package="3ea7e1c6-b849-4df9-931a-070171a8a2f0" Type="Part" Id="c44bd5ff-f918-415b-98e6-aca44fed84fa">
+      <Properties Name="Events" PackageName="GenexusBL" />
+    </Reference>
+    <Reference Package="be96cb0f-d79f-4801-b043-030d39209bc6" Type="UserControl" Id="GxMask" />
+    <Reference Package="3ea7e1c6-b849-4df9-931a-070171a8a2f0" Type="Object" Id="00000000-0000-0000-0000-000000000008">
+      <Properties Name="Folder" PackageName="GenexusBL" />
+    </Reference>
+  </Dependencies>
+  <ObjectsIdentityMapping>
+    <ObjectIdentity Type="ecececec-dfe0-4a57-ae8f-c6e31b0dcbc0" Name="Default" parent="">
+      <Guid>079440d4-af2c-491c-b50d-b4e660403d98</Guid>
+    </ObjectIdentity>
+    <ObjectIdentity Type="c88fffcd-b6f8-0000-8fec-00b5497e2117" Name="Root Module" parent="">
+      <Guid>afa47377-41d5-4ae8-9755-6f53150aa361</Guid>
+    </ObjectIdentity>
+    <ObjectIdentity Type="c9584656-94b6-4ccd-890f-332d11fc2c25" Name="MasterUnanimoSidebar" parent="General.UI">
+      <Guid>f9fe0d5d-cbde-48e9-9d42-072a05abae7b</Guid>
+    </ObjectIdentity>
+    <ObjectIdentity Type="c88fffcd-b6f8-0000-8fec-00b5497e2117" Name="UI" parent="General">
+      <Guid>a874d231-ec42-485f-8169-9458091190b1</Guid>
+    </ObjectIdentity>
+    <ObjectIdentity Type="c88fffcd-b6f8-0000-8fec-00b5497e2117" Name="General" parent="">
+      <Guid>c940501b-c1aa-4da5-a3ef-e8f497343e2e</Guid>
+    </ObjectIdentity>
+    <ObjectIdentity Type="78b3fa0e-174c-4b2b-8716-718167a428b5" Name="GW_CNPJ_ALFA" parent="">
+      <Guid>13cedc0d-557a-4b08-821e-614135581d7f</Guid>
+    </ObjectIdentity>
+  </ObjectsIdentityMapping>
+</ExportFile>
